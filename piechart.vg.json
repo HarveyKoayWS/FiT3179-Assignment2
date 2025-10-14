@@ -1,0 +1,90 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Distribution of vehicle registrations by type in 2025.",
+  "padding": {"top": 0, "left": 0, "right": 0, "bottom": 0},
+  "config": {
+    "title": {
+      "anchor": "middle",
+      "fontSize": 20,
+      "offset": 5
+    }
+  },
+  "title": {
+    "text": "Vehicle Registrations by Type (2025)",
+    "fontSize": 26,
+    "font": "Arial",
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "black"
+  },
+  "data": {
+    "url": "registrations_by_type.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.registrations / datum.registrations", 
+      "as": "percentage_check"
+    },
+    {
+      "joinaggregate": [{"op": "sum", "field": "registrations", "as": "total"}]
+    },
+    {
+      "calculate": "datum.registrations / datum.total * 100",
+      "as": "percentage"
+    }
+  ],
+  "encoding": {
+    "theta": {
+      "field": "registrations",
+      "type": "quantitative",
+      "stack": true
+    },
+    "color": {
+      "field": "type",
+      "type": "nominal",
+      "title": "Vehicle Type",
+      "legend": {"orient": "right"}
+    },
+    "tooltip": [
+      {"field": "type", "title": "Vehicle Type"},
+      {"field": "registrations", "type": "quantitative", "title": "Registrations", "format": ","},
+      {"field": "percentage", "type": "quantitative", "title": "Share (%)", "format": ".1f"}
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "outerRadius": 150,
+        "innerRadius": 70,
+        "stroke": "white",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radius": 120,
+        "fontSize": 12,
+        "fill": "black"
+      },
+      "encoding": {
+        "text": {"field": "percentage", "type": "quantitative", "format": ".1f"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "fontSize": 14,
+        "fontWeight": "bold",
+        "color": "firebrick",
+        "y": -180
+      },
+      "encoding": {
+        "text": {"value": "Most registered: Motokar (63%)"}
+      }
+    }
+  ],
+  "view": {"stroke": null}
+}

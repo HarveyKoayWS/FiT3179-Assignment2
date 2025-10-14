@@ -1,0 +1,90 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Interactive visualisation of KTMB ridership by service and month with tooltip, annotation and slider.",
+  "title": {
+    "text": "Monthly KTMB Ridership by Service (2018–2025)",
+    "fontSize": 26,
+    "font": "Arial",
+    "fontWeight": "bold",
+    "color": "black",
+    "anchor": "middle"
+  },
+  "data": {
+    "url": "ridership_ktmb_monthly.csv"
+  },
+  "width": "container",
+  "height": 450,
+
+  "params": [
+    {
+      "name": "yearFilter",
+      "value": 2022,
+      "bind": {
+        "input": "range",
+        "min": 2018,
+        "max": 2025,
+        "step": 1,
+        "name": "Select Year: "
+      }
+    }
+  ],
+
+  "transform": [
+    {"filter": "year(datum.date) == yearFilter"}
+  ],
+
+  "encoding": {
+    "x": {
+      "field": "date",
+      "timeUnit": "month",
+      "type": "temporal",
+      "title": "Month",
+      "axis": {"labelAngle": 0, "format": "%b"}
+    },
+    "y": {
+      "field": "ridership",
+      "type": "quantitative",
+      "title": "Ridership",
+      "axis": {"grid": true, "format": ",.2f"}
+    },
+    "color": {
+      "field": "service",
+      "type": "nominal",
+      "title": "Train Service",
+      "legend": {"orient": "top"}
+    },
+    "tooltip": [
+      {"field": "date", "type": "temporal", "title": "Date", "format": "%b %Y"},
+      {"field": "service", "type": "nominal", "title": "Service"},
+      {"field": "ridership", "type": "quantitative", "title": "Ridership", "format": ",.2f"}
+    ]
+  },
+
+  "layer": [
+    {
+      "mark": {"type": "line", "point": true, "strokeWidth": 2}
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "dy": -5,
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "color": "firebrick"
+      },
+      "transform": [
+        {
+          "filter": "datum.date == toDate('2020-04-01')"
+        }
+      ],
+      "encoding": {
+        "text": {"value": "COVID-19 lockdown"},
+        "x": {"field": "date", "timeUnit": "month"},
+        "y": {"field": "ridership"},
+        "opacity": {"value": 1}
+      }
+    }
+  ]
+}

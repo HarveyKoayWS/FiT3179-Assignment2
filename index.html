@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Malaysia Visualisations</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .vis-container {
+      display: flex;
+      flex-direction: column; /* vertical layout */
+      align-items: center;
+      justify-content: center;
+      gap: 40px; /* space between charts */
+      padding: 20px;
+    }
+
+    .chart-box {
+      width: 90%;
+      max-width: 1000px;
+      min-height: 500px;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 15px;
+
+      display: flex;               /* add this */
+      align-items: center;         /* vertically center */
+      justify-content: center;     /* horizontally center */
+    }
+
+      /* ensure the embed wrapper fills the chart box and centers the SVG inside */
+    #vis4 > svg {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 550px;
+      box-sizing: border-box;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="vis-container">
+    <div id="vis1" class="chart-box"></div>
+    <div id="vis2" class="chart-box"></div>
+    <div id="vis3" class="chart-box"></div>
+    <div id="vis4" class="chart-box"></div>
+  </div>
+
+  <script type="text/javascript">
+    vegaEmbed('#vis1', 'map.vg.json', {
+      actions: false,
+      renderer: "svg"
+    }).catch(console.error);
+
+    vegaEmbed('#vis2', 'monthlydata.vg.json', {
+      actions: false,
+      renderer: "svg"
+    }).catch(console.error);
+
+    vegaEmbed('#vis3', 'ridership_headline.vg.json', {
+      actions: false,
+      renderer: "svg"
+    }).catch(console.error);
+
+    vegaEmbed('#vis4', 'piechart.vg.json', {
+      actions: false,
+      renderer: "svg"
+    }).catch(console.error);
+  </script>
+</body>
+</html>
+

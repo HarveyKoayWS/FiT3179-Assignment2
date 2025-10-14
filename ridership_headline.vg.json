@@ -1,0 +1,78 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Stacked area chart of KTMB ridership by mode, with working year slider and annotation.",
+  "title": {
+    "text": "Monthly KTMB Ridership by Mode (2019–2025)",
+    "fontSize": 26,
+    "font": "Arial",
+    "fontWeight": "bold",
+    "color": "black",
+    "anchor": "middle"
+  },
+  "width": "container",
+  "height": 450,
+
+  "data": {
+    "url": "ridership_headline_long_monthly.csv",
+    "format": {
+      "type": "csv",
+      "parse": {"date": "date"}
+    }
+  },
+
+  "params": [
+    {
+      "name": "yearFilter",
+      "value": 2019,
+      "bind": {
+        "input": "range",
+        "min": 2019,
+        "max": 2025,
+        "step": 1,
+        "name": "Select Year: "
+      }
+    }
+  ],
+
+  "transform": [
+    { "calculate": "year(datum.date)", "as": "year" },
+    { "filter": "datum.year == yearFilter" }
+  ],
+
+  "layer": [
+    {
+      "mark": {"type": "area", "interpolate": "monotone", "opacity": 0.8},
+      "encoding": {
+        "x": {
+          "field": "date",
+          "timeUnit": "month",
+          "type": "temporal",
+          "title": "Month",
+          "axis": {"labelAngle": 0, "format": "%b"}
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "ridership",
+          "title": "Total Ridership",
+          "axis": {"format": ",", "titleFontWeight": "bold"}
+        },
+        "color": {
+          "field": "mode",
+          "type": "nominal",
+          "title": "Service Mode",
+          "legend": {
+            "orient": "bottom",
+            "columns": 3,
+            "labelFontSize": 11,
+            "titleFontSize": 12
+          }
+        },
+        "tooltip": [
+          {"field": "mode", "title": "Mode"},
+          {"field": "ridership", "type": "quantitative", "title": "Ridership", "format": ","},
+          {"field": "date", "type": "temporal", "title": "Month", "format": "%b %Y"}
+        ]
+      }
+    }
+  ]
+}
