@@ -3,14 +3,14 @@
   "description": "Stacked area chart of KTMB ridership by mode, with working year slider and annotation.",
   "title": {
     "text": "Monthly KTMB Ridership by Mode (2019–2025)",
-    "fontSize": 26,
-    "font": "Arial",
+    "fontSize": 24,
+    "font": "Garamond",
     "fontWeight": "bold",
     "color": "black",
     "anchor": "middle"
   },
-  "width": "container",
-  "height": 450,
+  "width": 700,
+  "height": 300,
 
   "data": {
     "url": "ridership_headline_long_monthly.csv",
@@ -60,11 +60,26 @@
           "field": "mode",
           "type": "nominal",
           "title": "Service Mode",
+          "scale": {
+            "range": [
+              "#0072B2",  
+              "#E69F00",  
+              "#56B4E9",  
+              "#D55E00", 
+              "#F0E442",  
+              "#009E73", 
+              "#CC79A7", 
+              "#999999",
+              "#332288" 
+            ]
+          },
           "legend": {
             "orient": "bottom",
             "columns": 3,
             "labelFontSize": 11,
-            "titleFontSize": 12
+            "titleFontSize": 12,
+            "labelFont": "Futura",
+            "titleFont": "Futura"
           }
         },
         "tooltip": [
