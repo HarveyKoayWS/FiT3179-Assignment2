@@ -1,0 +1,60 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Total and Bottom 10 Most Registered Car Brand in 2025",
+    "fontSize": 26,
+    "font": "Garamond",
+    "fontWeight": "bold",
+    "anchor": "middle",
+    "color": "black"
+  },
+  "description": "Top and Bottom 10 Car Brands by Registrations",
+  "data": { "url": "brands_top_bottom.csv" },
+  "params": [
+    {
+      "name": "view",
+      "value": "Top 10",
+      "bind": {
+        "input": "select",
+        "options": ["Top 10", "Bottom 10"],
+        "name": "Select view: "
+      }
+    }
+  ],
+  "transform": [
+    { "filter": "datum.category == view" },
+    {
+      "calculate": "datum.rank == 1 ? '#005b96' : datum.rank == 2 ? '#66b3ff' : '#cccccc'",
+      "as": "bar_color"
+    }
+  ],
+  "mark": { "type": "bar", "cornerRadiusEnd": 4 },
+  "encoding": {
+    "y": {
+      "field": "maker",
+      "type": "nominal",
+      "sort": "-x",
+      "title": "Car Make"
+    },
+    "x": {
+      "field": "registrations",
+      "type": "quantitative",
+      "title": "Number of Registrations"
+    },
+    "color": {
+      "field": "bar_color",
+      "type": "nominal",
+      "scale": null,
+      "legend": null
+    },
+    "tooltip": [
+      { "field": "maker", "title": "Car Make" },
+      { "field": "registrations", "title": "Registrations" }
+    ]
+  },
+  "width": 450,
+  "height": 300,
+  "config": {
+    "axis": { "labelFontSize": 12, "titleFontSize": 14 }
+  }
+}

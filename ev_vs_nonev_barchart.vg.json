@@ -1,0 +1,161 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Percentage of Vehicle Registrations by Fuel Type (Monthly)",
+    "fontSize": 24,
+    "font": "Garamond",
+    "fontWeight": "bold",
+    "color": "black",
+    "anchor": "middle"
+  },
+  "description": "Monthly percentage of vehicle registrations by fuel type with interactive dropdown and trend lines.",
+  "data": {"url": "fuel_share_monthly.csv"},
+  "params": [
+    {
+      "name": "fuel_select",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "options": [
+          "All",
+          "electric",
+          "hybrid_petrol",
+          "hybrid_diesel",
+          "petrol",
+          "diesel",
+          "greendiesel"
+        ],
+        "labels": [
+          "All",
+          "Electric",
+          "Hybrid (Petrol)",
+          "Hybrid (Diesel)",
+          "Petrol",
+          "Diesel",
+          "Green Diesel"
+        ],
+        "name": "Select Fuel Type: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "fuel_select == 'All' || datum.fuel == fuel_select"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "cornerRadiusEnd": 3},
+      "encoding": {
+        "x": {
+          "field": "month",
+          "type": "ordinal",
+          "title": "Month",
+          "axis": {"labelAngle": 0}
+        },
+        "y": {
+          "field": "percentage",
+          "type": "quantitative",
+          "title": "Percentage of Registrations (%)",
+          "axis": {"format": ".1f"}
+        },
+        "xOffset": {"field": "fuel"},
+        "color": {
+          "field": "fuel",
+          "type": "nominal",
+          "title": "Fuel Type",
+          "scale": {
+            "domain": [
+              "electric",
+              "hybrid_petrol",
+              "hybrid_diesel",
+              "petrol",
+              "diesel",
+              "greendiesel"
+            ],
+            "range": [
+              "#0072B2",
+              "#E69F00",
+              "#56B4E9",
+              "#D55E00",
+              "#FOE442",
+              "red"
+            ]
+          }
+        },
+        "tooltip": [
+          {"field": "month", "type": "ordinal", "title": "Month"},
+          {"field": "fuel", "type": "nominal", "title": "Fuel Type"},
+          {
+            "field": "percentage",
+            "type": "quantitative",
+            "format": ".2f",
+            "title": "Percentage (%)"
+          },
+          {"field": "count", "type": "quantitative", "title": "Registrations"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "loess": "percentage",
+          "on": "month",
+          "groupby": ["fuel"],
+          "bandwidth": 0.5
+        }
+      ],
+      "mark": {"type": "line", "strokeWidth": 2, "opacity": 0.85},
+      "encoding": {
+        "x": {"field": "month", "type": "ordinal"},
+        "y": {"field": "percentage", "type": "quantitative"},
+        "color": {
+          "field": "fuel",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "electric",
+              "hybrid_petrol",
+              "hybrid_diesel",
+              "petrol",
+              "diesel",
+              "greendiesel"
+            ],
+            "range": [
+              "#0072B2",
+              "#E69F00",
+              "#56B4E9",
+              "#D55E00",
+              "#FOE442",
+              "red"
+            ]
+          },
+          "legend": {"title": "Fuel Type"}
+        }
+      }
+    }
+  ],
+  "width": 650,
+  "height": 400,
+  "config": {
+    "axis": {
+      "labelFont": "Futura",
+      "titleFont": "Futura",
+      "labelFontSize": 12,
+      "titleFontSize": 14
+    },
+    "legend": {
+      "labelFont": "Futura",
+      "titleFont": "Futura",
+      "titleFontSize": 13, 
+      "labelFontSize": 12
+    },
+    "title": {
+      "font": "Garamond",
+      "fontSize": 18,
+      "fontWeight": "bold"
+    },
+    "view": {"stroke": "transparent"},
+    "bar": {"size": 18}
+  }
+}

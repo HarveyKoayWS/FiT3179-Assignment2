@@ -1,0 +1,79 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Scatter plot showing relationship between total rail and bus ridership (flipped axes) with regression line.",
+  "title": {
+    "text": "Total Bus Ridership vs Total Rail Ridership",
+    "fontSize": 24,
+    "font": "Garamond",
+    "fontWeight": "bold",
+    "color": "black",
+    "anchor": "middle"
+  },
+  "data": {
+    "url": "ridership_combined.csv"
+  },
+  "transform": [
+    {
+      "aggregate": [
+        {"op": "sum", "field": "total_bus", "as": "total_bus"},
+        {"op": "sum", "field": "total_rail", "as": "total_rail"}
+      ],
+      "groupby": ["date"]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "color": "#1f77b4",
+        "size": 80
+      },
+      "encoding": {
+        "x": {
+          "field": "total_rail",
+          "type": "quantitative",
+          "title": "Total Rail Ridership"
+        },
+        "y": {
+          "field": "total_bus",
+          "type": "quantitative",
+          "title": "Total Bus Ridership",
+        "scale": {"domain": [0, 1400000]}
+        },
+        "tooltip": [
+          {"field": "date", "type": "temporal", "title": "Date"},
+          {"field": "total_rail", "type": "quantitative", "title": "Rail"},
+          {"field": "total_bus", "type": "quantitative", "title": "Bus"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "regression": "total_bus",
+          "on": "total_rail"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "red",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {"field": "total_rail", "type": "quantitative"},
+        "y": {"field": "total_bus", "type": "quantitative"}
+      }
+    }
+  ],
+  "width": 700,
+  "height": 300,
+  "config": {
+    "axis": {
+      "labelFontSize": 12,
+      "titleFontSize": 14,
+      "labelFont": "Futura",
+      "titleFont": "Futura"
+    }
+  }
+}
