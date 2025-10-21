@@ -4,7 +4,7 @@
   "title": {
     "text": "Monthly KTMB Ridership by Service (2018–2025)",
     "fontSize": 26,
-    "font": "Arial",
+    "font": "Garamond",
     "fontWeight": "bold",
     "color": "black",
     "anchor": "middle"
@@ -12,8 +12,8 @@
   "data": {
     "url": "ridership_ktmb_monthly.csv"
   },
-  "width": "container",
-  "height": 450,
+  "width": 800,
+  "height": 400,
 
   "params": [
     {
@@ -39,19 +39,33 @@
       "timeUnit": "month",
       "type": "temporal",
       "title": "Month",
-      "axis": {"labelAngle": 0, "format": "%b"}
+      "axis": {"labelAngle": 0, "format": "%b", "labelFont": "Futura", "titleFont": "Futura"}
     },
     "y": {
       "field": "ridership",
       "type": "quantitative",
       "title": "Ridership",
-      "axis": {"grid": true, "format": ",.2f"}
+      "axis": {"grid": true, "format": ",.2f", "labelFont": "Futura", "titleFont": "Futura"}
     },
     "color": {
       "field": "service",
       "type": "nominal",
       "title": "Train Service",
-      "legend": {"orient": "top"}
+      "legend": {"orient": "top", "labelFont": "Futura", "titleFont": "Futura"},
+      "scale": {
+        "domain": [
+          "ets",
+          "intercity",
+          "komuter_utara",
+          "shuttle_tebrau"
+        ],
+        "range": [
+          "#0072B2",  
+          "#E69F00",  
+          "#009E73",  
+          "#D55E00" 
+        ]
+      }
     },
     "tooltip": [
       {"field": "date", "type": "temporal", "title": "Date", "format": "%b %Y"},
