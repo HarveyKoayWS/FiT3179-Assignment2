@@ -2,14 +2,14 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
     "text": "Vehicle Registrations per 1,000 People by State (Malaysia, 2025)",
-    "fontSize": 26,
-    "font": "Arial",
+    "fontSize": 24,
+    "font": "Garamond",
     "fontWeight": "bold",
     "color": "black",
     "anchor": "middle"
   },
-  "width": "container",
-  "height": "container",
+  "width": 890,
+  "height": 350,
   "autosize": {
     "type": "fit",
     "contains": "padding"
@@ -17,7 +17,7 @@
   "projection": {
     "type": "mercator",
     "center": [109.5, 4],  
-    "scale": 2400      
+    "scale": 2200     
   },
   "layer": [
     {
@@ -43,8 +43,10 @@
             "clamp": true
           },
           "legend": {
-            "title": "Registrations\nper 1k",
+            "title": "Per 1,000 People",
             "orient": "right",
+            "labelFont": "Futura",
+            "titleFont": "Futura",
             "titleFontSize": 16,
             "labelFontSize": 12
           }
