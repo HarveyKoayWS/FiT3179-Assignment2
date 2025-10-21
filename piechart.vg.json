@@ -12,7 +12,7 @@
   "title": {
     "text": "Vehicle Registrations by Type (2025)",
     "fontSize": 26,
-    "font": "Arial",
+    "font": "Garamond",
     "fontWeight": "bold",
     "anchor": "middle",
     "color": "black"
@@ -43,7 +43,7 @@
       "field": "type",
       "type": "nominal",
       "title": "Vehicle Type",
-      "legend": {"orient": "right"}
+      "legend": {"orient": "bottom-right", "labelFont": "Futura", "titleFont": "Futura"}
     },
     "tooltip": [
       {"field": "type", "title": "Vehicle Type"},
@@ -82,9 +82,11 @@
         "y": -180
       },
       "encoding": {
-        "text": {"value": "Most registered: Motokar (63%)"}
+        "text": {"value": "Most registered: Motokar (58%)"}
       }
     }
   ],
-  "view": {"stroke": null}
+  "view": {"stroke": null},
+  "height": 10,
+  "width": 600
 }
