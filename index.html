@@ -1,82 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Malaysia Visualisations</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malaysia Transportation Insights Dashboard</title>
+
+  <!-- Vega Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-    }
-
-    .vis-container {
-      display: flex;
-      flex-direction: column; /* vertical layout */
-      align-items: center;
-      justify-content: center;
-      gap: 40px; /* space between charts */
-      padding: 20px;
-    }
-
-    .chart-box {
-      width: 90%;
-      max-width: 1000px;
-      min-height: 500px;
-      background-color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      border-radius: 12px;
-      padding: 15px;
-
-      display: flex;               /* add this */
-      align-items: center;         /* vertically center */
-      justify-content: center;     /* horizontally center */
-    }
-
-      /* ensure the embed wrapper fills the chart box and centers the SVG inside */
-    #vis4 > svg {
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
+      padding: 0;
       width: 100%;
-      height: 550px;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #7ab6e7 100%);
+      color: #333;
       box-sizing: border-box;
+      font-family: 'Futura', sans-serif;
     }
 
+    h1 {
+      text-align: center;
+      padding: 1.2rem 0 0.5rem 0;
+      margin: 0;
+      font-family: 'Garamond', serif;
+      font-size: 3.3rem;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: 0.5px;
+    }
+
+    .intro {
+      max-width: 800px;
+      margin: 0 auto 2rem auto;
+      text-align: justify;
+      font-family: 'Futura', sans-serif;
+      color: #222;
+      font-size: 1.2rem;
+      line-height: 1.8;
+    }
+
+    /* Dashboard wrapper */
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding: 1rem 2rem;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    /* Each row acts as its own grid */
+    .row {
+      display: grid;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .dashboard-summary {
+      text-align: justify;
+      font-family: 'Futura', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #222;
+      border-radius: 12px;
+    }
+
+
+    /* Custom ratios for each row */
+    .row1 { grid-template-columns: 2fr 1fr; }
+    .row2 { grid-template-columns: 1fr 1fr; }
+    .row3 { grid-template-columns: 1fr 1fr; }
+    .row4 { grid-template-columns: 2fr 1fr; }
+    .row5 { grid-template-columns: 1fr; }
+    .row6 { grid-template-columns: 2fr 1fr; }
+    .row7 { grid-template-columns: 1fr 2fr; }
+    .row8 { grid-template-columns: 1fr; }
+
+    /* Base box style */
+    .box {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 300px;
+      transition: box-shadow 0.2s ease;
+      overflow: hidden;
+    }
+
+    .box:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* Make text boxes smaller */
+    .box[class*="text"] {
+      min-height: 90px;
+      text-align: left;
+    }
+
+    /* Vega chart scaling */
+    .vega-embed {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .graph-description {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #666;
+      background-color: #f5f5f5;
+      border-top: 1px solid #ddd;
+    }
+
+    /* Responsive layout */
+    @media (max-width: 900px) {
+      .row {
+        grid-template-columns: 1fr !important;
+      }
+      .dashboard {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div class="vis-container">
-    <div id="vis1" class="chart-box"></div>
-    <div id="vis2" class="chart-box"></div>
-    <div id="vis3" class="chart-box"></div>
-    <div id="vis4" class="chart-box"></div>
+  <h1>Malaysia Transportation Insights Dashboard</h1>
+  <p class="intro">
+    This interactive dashboard provides a comprehensive overview of Malaysia’s <br/>
+    transportation ecosystem. It visualises vehicle registrations, the rise of <br/> 
+    electric vehicles (EVs), public transport ridership, and modal comparisons <br/>
+    across the country. The goal is to highlight national trends and patterns  <br/>
+    that inform sustainable mobility and infrastructure planning.
+  </p>
+
+  <div class="dashboard">
+
+    <!-- Row 1: Map + Text -->
+    <div class="row row1">
+      <div id="map1" class="box map1"></div>
+      <div class="box text1">
+        <p>
+          This map visualises <b>vehicle registrations per 1,000 people</b> across each state in Malaysia 
+          showing possible differences between the economic state in each state individually and differences
+          between Peninsular and East Malaysia. It highlights key regions where road systems are most concentrated, 
+          offering insights into connectivity and accessibility across states.
+        </p>
+      </div>
+    </div>
+
+    <!-- Row 2: Two Charts -->
+    <div class="row row2">
+      <div id="chart1" class="box chart1"></div>
+      <div id="chart2" class="box chart2"></div>
+    </div>
+
+    <!-- Row 3: Two Text Boxes -->
+    <div class="row row3">
+      <div class="box text2"> 
+        <p class="graph-description">
+          The pie chart illustrates the proportion of <b>registered vehicle types</b> in Malaysia for 2025. 
+          It shows that <b>motocars</b> (passenger cars) dominate registrations, making up about <b>58%</b> of all vehicles. 
+          Other categories such as <i>jeep (jip)</i>, <i>pick-up trucks</i>, and <i>window vans</i> form smaller shares, 
+          indicating that personal cars remain the preferred mode of private transport in Malaysia.
+        </p>  
+      </div>
+        <div class="box text3">
+          <p class="graph-description">
+            The bar chart displays the <b>top car manufacturers by registration volume</b> in Malaysia for 2025. 
+            <b>Perodua</b> and <b>Proton</b> clearly dominate the market, reflecting strong national brand loyalty and 
+            affordability within the local segment. Global brands such as <i>Toyota</i> and <i>Honda</i> follow behind, 
+            capturing substantial but smaller market shares. The presence of emerging brands like <i>BYD</i> and 
+            <i>Chery</i> highlights Malaysia’s gradual diversification towards international and electric vehicle producers.
+          </p>
+        </div>
+    </div>
+      
+    <!-- Row 4: Chart + Text -->
+    <div class="row row4">
+      <div id="chart3" class="box chart3"></div>
+      <div class="box text4">
+        <p>
+          The bar chart visualises the <b>monthly share of vehicle registrations by fuel type</b> across Malaysia in 2025. 
+          <b>Petrol-powered vehicles</b> overwhelmingly dominate as that is still the most sold products across all brands.
+          In contrast, <b>electric and hybrid vehicles</b> remain a small but gradually emerging segment, reflecting 
+          early adoption trends toward cleaner mobility. The dropdown filter allows for focused analysis of 
+          individual fuel types over time, highlighting subtle shifts in registration preferences.
+        </p>
+      </div>
+    </div>
+
+    <!-- Row 5: Single Text Box -->
+    <div class="row row5">
+      <div class="box text5"> 
+        <p class="dashboard-summary">
+          The <b>Malaysia Cars Registration Dataset</b> provides a comprehensive overview of the nation's 
+          evolving mobility landscape. It brings together data on <b>vehicle registrations</b>, <b>fuel adoption trends</b>, 
+          and <b>public transport usage</b> to highlight key developments in the private transportation sector.  
+          Through visual analytics, the dashboard reveals Malaysia’s continued reliance on conventional fuel vehicles, 
+          the steady rise of <b>electric mobility</b>, and regional differences in transport infrastructure — offering 
+          valuable insights into progress toward a more sustainable and connected transportation system.
+        </p>
+    </div>
+
+    <!-- Row 6: Chart + Text -->
+    <div class="row row6">
+      <div id="chart4" class="box chart4"></div>
+      <div class="box text6">
+        <p class="graph-description">
+          The scatter plot compares <b>total bus ridership</b> against <b>total rail ridership</b> across Malaysia. 
+          Each point represents a recorded period, showing a clear positive correlation between the two modes. 
+          It actually indicates shows that the total rail ridership is generally higher than bus ridership,
+          suggesting a stronger preference for rail transport in urban areas as it may be more efficient and reliable.
+        </p>
+      </div>
+  </div>
+
+    </div>
+
+    <!-- Row 7: Text + Chart -->
+    <div class="row row7">
+      <div class="box text7">
+        <p>
+          The stacked area chart visualises <b>monthly KTM (Keretapi Tanah Melayu) ridership by mode</b> 
+          from 2019 to 2025. It captures the evolution of Malaysia’s rail usage — including ETS, LRT, MRT, 
+          and monorail services — highlighting overall growth in public transit reliance. 
+          The noticeable fluctuations across months reflect <b>seasonal demand patterns</b>, 
+          infrastructure improvements, and recovery from the pandemic’s impact on mobility. 
+        </p>
+      </div>
+      <div id="chart5" class="box chart5"></div>
+    </div>
+
+
+    <!-- Row 8: Chart + Text -->
+    <div class="row row8">
+      <div id="chart6" class="box chart6"></div>
+      <div class="box text8">       
+        <p>
+          The final chart compares <b>bus and rail ridership trends</b> across Malaysia, highlighting the 
+          interdependence between different modes of public transport. The strong positive relationship 
+          indicates that as rail ridership grows, bus ridership often increases too — suggesting 
+          <b>complementary usage</b> rather than competition. This correlation reflects integrated travel 
+          behaviour among commuters, where bus networks act as key feeders to rail systems.  
+          Insights from this visual can inform <b>strategic planning for multimodal transport</b>, guiding 
+          investment in routes, frequency, and last-mile connectivity to strengthen overall accessibility.
+        </p> 
+      </div>
+    </div>
+
+
   </div>
 
   <script type="text/javascript">
-    vegaEmbed('#vis1', 'map.vg.json', {
-      actions: false,
-      renderer: "svg"
-    }).catch(console.error);
+    // Map
+    vegaEmbed('#map1', 'map.vg.json', { actions: false, renderer: "svg" }).catch(console.error);
 
-    vegaEmbed('#vis2', 'monthlydata.vg.json', {
-      actions: false,
-      renderer: "svg"
-    }).catch(console.error);
+    // Pie chart + Top registered brands
+    vegaEmbed('#chart1', 'piechart.vg.json', { actions: false, renderer: "svg" }).catch(console.error);
+    vegaEmbed('#chart2', 'top_registered.vg.json', { actions: false, renderer: "svg" }).catch(console.error);
 
-    vegaEmbed('#vis3', 'ridership_headline.vg.json', {
-      actions: false,
-      renderer: "svg"
-    }).catch(console.error);
+    // EV Adoption
+    vegaEmbed('#chart3', 'ev_vs_nonev_barchart.vg.json', { actions: false, renderer: "svg" }).catch(console.error);
 
-    vegaEmbed('#vis4', 'piechart.vg.json', {
-      actions: false,
-      renderer: "svg"
-    }).catch(console.error);
+    // Ridership by mode
+    vegaEmbed('#chart4', 'rail_bus_ridership.vg.json', { actions: false, renderer: "svg" }).catch(console.error);
+
+    // Monthly KTMB ridership
+    vegaEmbed('#chart5', 'ridership_headline.vg.json', { actions: false, renderer: "svg" }).catch(console.error);
+
+    // Bus ridership vs rail
+    vegaEmbed('#chart6', 'monthlydata.vg.json', { actions: false, renderer: "svg" }).catch(console.error);
   </script>
+
+  <div class="footer">
+    &copy; Harvey Koay Wern Shern. 21/10/2025. Malaysia Transportation Insights Dashboard. All rights reserved.<br/>
+    Data from data.gov.my.<br/>
+    Datasets used are are, <a href="https://data.gov.my/data-catalogue/ridership_headline">Daily Public Transport Ridership</a>, <a href="https://data.gov.my/data-catalogue/ridership_od_ets">Hourly Origin-Destination Ridership: ETS</a>, and etc.
+
+  </div>
 </body>
 </html>
-
